@@ -27,7 +27,7 @@ export interface UIResponseSingleMinifig {
 export interface GetMimifigsParams {
   page: string;
   pageSize: string;
-  in_theme_id: string;
+  inThemeId: string;
 }
 
 export interface ServerResponseMinifigParts {

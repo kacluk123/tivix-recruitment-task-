@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { useLoaderData } from 'react-router'
 import styled from 'styled-components'
+import { UIResponseMinifigs } from '../services/minifigs'
 
 const Container = styled.div`
   display: flex;
@@ -13,17 +14,15 @@ const Container = styled.div`
   color: #FFFFFF;
 `
 
-export const HomePage = () => {
+export const ChooseMinifig = () => {
+  const minifigs = useLoaderData() as UIResponseMinifigs
+
+  console.log(minifigs)
   return (
     <Container>
-      <Typography variant="h2" component="h2" fontWeight="800">
-        LEGO MINIFIGS MYSTERY BOX
+      <Typography variant="h4" fontWeight="800">
+        CHOOSE YOUR MINIFIG
       </Typography>
-      <Link to='choose-minifig'>
-        <Button variant="contained" size="large">
-          LET'S GO
-        </Button>
-      </Link>
     </Container>
   )
 }
