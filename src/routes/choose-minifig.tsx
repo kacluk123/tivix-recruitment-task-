@@ -1,4 +1,5 @@
 import { Button, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useLoaderData } from 'react-router'
 import { useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -19,13 +20,11 @@ const Container = styled.div`
 
 export const ChooseMinifig = () => {
   const minifigs = useLoaderData() as UIResponseMinifigs
-  const [params, setQueryParams] = useSearchParams()
+  const [ minifig, setMinifig ] = useState("")
 
   const handlePickMinifig = (minifigId: string) => {
-    setQueryParams([['minifigId', minifigId]])
+    setMinifig(minifigId)
   }
-
-  const minifigId = params.get('minifigId')
 
   return (
     <Container>
@@ -35,12 +34,12 @@ export const ChooseMinifig = () => {
       <MinifigPicker 
         minifigs={minifigs.results} 
         handlePick={handlePickMinifig} 
-        currentSelected={minifigId}
+        currentSelected={minifig}
       />
       <Button variant="contained" 
         size="large" 
-        disabled={!minifigId} 
-        href={`minifig-checkout/${minifigId}`}
+        disabled={!minifig} 
+        href={`minifig-checkout/${minifig}`}
       >
         PROCEED TO SHIPMENT
       </Button>

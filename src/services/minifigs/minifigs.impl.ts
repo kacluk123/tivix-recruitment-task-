@@ -1,16 +1,21 @@
-import { minifigPartsDto, minifigsDto } from "./minifigs.dto"
-import { GetMimifigsParams, ServerResponseMinifigParts, ServerResponseMinifigs } from "./minifigs.types"
-
-const HARRY_POTTER_THEME_ID = 246
+import { UIResponseMinifigParts, UIResponseMinifigs } from "."
+import { HARRY_POTTER_THEME_ID } from "../../utils/consts"
+import { getRandomArray } from "../../utils/get-random-array"
+import { minifigPartsDto, minifigsDto, singleMinifigDto } from "./minifigs.dto"
+import { 
+  GetMimifigsParams, 
+  ServerResponseMinifigParts, 
+  ServerResponseMinifigs, 
+  ServerResponseSingleMinifig,  
+  UIResponseSingleMinifig
+} from "./minifigs.types"
 
 class MinifigsService {
   private apiUrl: string = import.meta.env.VITE_MINIFIGS_API
   private authKey: string = import.meta.env.VITE_API_AUTHORIZATION_KEY
 
   async getMinifigs(params: GetMimifigsParams) {
-    const url = new URL(`${this.apiUrl}/lego/minifigs/`)
-    url.searchParams.append('page', params.page)
-    url.searchParams.append('page_size', params.pageSize)
+    const url = new URL(`${this.apiUrl}/lego/minifigs`)
     url.searchParams.append('in_theme_id', params.inThemeId)
 
     const response = await fetch(url.href, {
@@ -22,8 +27,28 @@ class MinifigsService {
     return minifigsDto(data)
   }
 
-  async getMinifigParts(minifigId: string) {
-    const url = `${this.apiUrl}/lego/minifigs/${minifigId}/parts/`
+  async getRandomMinifigs(): Promise<UIResponseMinifigs> {
+    const data = await this.getMinifigs({ 
+      inThemeId: HARRY_POTTER_THEME_ID 
+    })
+    return {
+      results: getRandomArray<UIResponseSingleMinifig>(data.results, 3)
+    }
+  }
+
+  async getSingleMinifig(minifigId: string): Promise<UIResponseSingleMinifig> {
+    const url = `${this.apiUrl}/lego/minifigs/${minifigId}`
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `key ${this.authKey}`
+      }
+    })
+    const data: ServerResponseSingleMinifig = await response.json()
+    return singleMinifigDto(data)
+  }
+
+  async getMinifigParts(minifigId: string): Promise<UIResponseMinifigParts> {
+    const url = `${this.apiUrl}/lego/minifigs/${minifigId}/parts`
     const response = await fetch(url, {
       headers: {
         'Authorization': `key ${this.authKey}`

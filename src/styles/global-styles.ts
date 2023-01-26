@@ -29,6 +29,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100vh;
     background-color: #1F2137;
     margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
   }
 
   #root {

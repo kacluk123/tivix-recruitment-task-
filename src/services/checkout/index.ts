@@ -1,0 +1,1 @@
+export type { MinifigUIFormData } from './checkout.types'

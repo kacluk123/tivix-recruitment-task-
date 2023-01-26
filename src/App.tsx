@@ -18,11 +18,7 @@ const router = createBrowserRouter([
     path: "choose-minifig",
     element: <ChooseMinifig />,
     loader: async () => {
-      return minifigService.getMinifigs({
-        page: '1',
-        pageSize: '3',
-        inThemeId: '246'
-      })
+      return minifigService.getRandomMinifigs()
     }
   },
   {
@@ -30,9 +26,16 @@ const router = createBrowserRouter([
     element: <MinifigCheckout />,
     loader: async ({ params: { minifigId }}) => {
       if (minifigId) {
-        const parts = await minifigService.getMinifigParts(minifigId)
+        const [ minifig, parts ] = await Promise.all([
+          await minifigService.getSingleMinifig(minifigId),
+          await minifigService.getMinifigParts(minifigId)
+        ])
+
         if (parts.results.length > 0) {
-          return minifigService.getMinifigParts(minifigId)
+          return {
+            parts,
+            minifig
+          }
         }
         return redirect('/')
       }

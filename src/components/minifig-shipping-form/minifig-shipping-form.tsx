@@ -1,8 +1,8 @@
 import { TextField, Typography } from '@mui/material'
 import styled from 'styled-components'
-import { FormControlLabel } from '@mui/material';
 import { FieldErrorsImpl, UseFormRegister } from 'react-hook-form';
-import { emailRegex } from '../../utils/validation-regex';
+import { emailRegex, phoneNumberRegex } from '../../utils/validation-regex';
+import { MinifigUIFormData } from '../../services/checkout';
 
 const Container = styled.div`
   display: flex;
@@ -39,38 +39,21 @@ const Input = styled(TextField)`
   }
 
   & .MuiFormLabel-root {
-    color: rgba(221, 123, 44, 1);
-    &.Mui-focused fieldset {
-      border-color: red;
-    }
+    color: var(--main-selection-color);
   }
   & .MuiOutlinedInput-notchedOutline {
     border: 1px solid var(--main-selection-color-light);
   }
-  & svg {
-    color: red;
-  }
 `
 const labelProps = { shrink: true}
 
-export interface MinifigForm {
-  name: string;
-  surname: string;
-  phoneNumber: string;
-  email: string;
-  dateOfBirth: string;
-  adress: string;
-  city: string;
-  state: string;
-  zipCode: string;
-}
-
 type MinifigShippingFormProps = {
-  register: UseFormRegister<MinifigForm>
-  errors: Partial<FieldErrorsImpl<MinifigForm>>
+  register: UseFormRegister<MinifigUIFormData>
+  errors: Partial<FieldErrorsImpl<MinifigUIFormData>>
 }
 
 export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormProps) => {
+  console.log(errors)
   return (
     <Container>
       <Typography 
@@ -90,7 +73,10 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
             error={Boolean(errors?.name)}
             helperText={errors.name?.type}
             id="outlined-error-helper-text"
-            {...register("name", { required: true })} 
+            {...register("name", { 
+              minLength: 2,
+              required: true,
+            })} 
           />
           <Input 
             InputLabelProps={labelProps} 
@@ -107,18 +93,24 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
           label='Phone Number' 
           variant='outlined'
           error={Boolean(errors?.phoneNumber)}
-          helperText={errors.phoneNumber?.type}
+          helperText={errors.phoneNumber?.message || errors.phoneNumber?.type}
           id="outlined-error-helper-text"
-          {...register("phoneNumber", { required: true })} 
+          {...register("phoneNumber", { required: true, pattern: {
+            value: phoneNumberRegex,
+            message: 'Phone number not valid'
+          } })} 
         />
         <Input 
           InputLabelProps={labelProps} 
           label='Email' 
           variant='outlined'
           error={Boolean(errors?.email)}
-          helperText={errors.email?.type}
+          helperText={errors.email?.message || errors.email?.type}
           id="outlined-error-helper-text"
-          {...register("email", { required: true, pattern: emailRegex })} 
+          {...register("email", { required: true, pattern: {
+            value: emailRegex,
+            message: 'Email not valid'
+          }})} 
         />
         <Input 
           InputLabelProps={labelProps} 

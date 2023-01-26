@@ -1,14 +1,8 @@
-import { ServerResponseMinifigParts, ServerResponseMinifigs, UIResponseMinifigParts, UIResponseMinifigs } from './minifigs.types'
+import { UIResponseSingleMinifig } from '.'
+import { ServerResponseMinifigParts, ServerResponseMinifigs, ServerResponseSingleMinifig, UIResponseMinifigParts, UIResponseMinifigs } from './minifigs.types'
 
 export const minifigsDto = (minifigs: ServerResponseMinifigs): UIResponseMinifigs => ({
-  results: minifigs.results.map(minifig => ({
-    setNum: minifig.set_num,
-    name: minifig.name,
-    numParts: minifig.num_parts,
-    setImgUrl: minifig.set_img_url,
-    setUrl: minifig.set_url,
-    lastModifiedDt: minifig.last_modified_dt
-  }))
+  results: minifigs.results.map(minifig => singleMinifigDto(minifig)),
 })
 
 export const minifigPartsDto = (minifigParts: ServerResponseMinifigParts): UIResponseMinifigParts => ({
@@ -18,4 +12,13 @@ export const minifigPartsDto = (minifigParts: ServerResponseMinifigParts): UIRes
     partUrl: minifigPart.part.part_url,
     partNum: minifigPart.part.part_num
   }))
+})
+
+export const singleMinifigDto = (minifig: ServerResponseSingleMinifig): UIResponseSingleMinifig => ({
+  setNum: minifig.set_num,
+  name: minifig.name,
+  numParts: minifig.num_parts,
+  setImgUrl: minifig.set_img_url,
+  setUrl: minifig.set_url,
+  lastModifiedDt: minifig.last_modified_dt
 })

@@ -26,7 +26,7 @@ const MinifigCardContainer = styled(Card)`
   border-radius: 50px;
   &.MuiPaper-root {
     ${((props: { isSelected: boolean }) => props.isSelected && css`
-    box-shadow: 1px 0px 8px 10px rgba(221, 123, 44, 1);
+    box-shadow: 1px 0px 8px 10px var(--main-selection-color);
   `)}
   }
 `
@@ -53,13 +53,9 @@ export const MinifigCard = ({ minifig, handlePick, isSelected }: MinifigCardProp
   const handleClick = () => {
     handlePick(minifig.setNum)
   }
-  
-  const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-    handlePick(minifig.setNum)
-  }
 
   return (
-    <MinifigCardContainer onClick={handleClick} isSelected={isSelected} tab-index="0" onFocus={handleFocus}>
+    <MinifigCardContainer onClick={handleClick} isSelected={isSelected}>
       <MinifigCardContent>
         <MinifigsImage src={minifig.setImgUrl} alt={minifig.name}/>
         <MinifigNameContent>
