@@ -1,0 +1,1 @@
+export { MinifigPicker } from './minifig-picker'
