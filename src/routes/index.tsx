@@ -30,8 +30,8 @@ export const routes = createBrowserRouter([
     loader: async ({ params: { minifigId }}) => {
       if (minifigId) {
         const [ minifig, parts ] = await Promise.all([
-          await minifigService.getSingleMinifig(minifigId),
-          await minifigService.getMinifigParts(minifigId)
+          minifigService.getSingleMinifig(minifigId),
+          minifigService.getMinifigParts(minifigId)
         ])
 
         if (parts.results.length > 0) {
