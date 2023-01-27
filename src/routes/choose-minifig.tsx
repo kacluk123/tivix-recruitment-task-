@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useLoaderData } from 'react-router'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { MinifigPicker } from '../components/minifig-picker'
 import { UIResponseMinifigs } from '../services/minifigs'
@@ -10,6 +10,7 @@ const Container = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+  min-height: inherit;
   justify-content: center;
   flex-direction: column;
   padding: 30px;
@@ -36,13 +37,20 @@ export const ChooseMinifig = () => {
         handlePick={handlePickMinifig} 
         currentSelected={minifig}
       />
-      <Button variant="contained" 
-        size="large" 
-        disabled={!minifig} 
-        href={`minifig-checkout/${minifig}`}
-      >
-        PROCEED TO SHIPMENT
-      </Button>
+        <Link to={`/minifig-checkout/${minifig}`} 
+          style={{ 
+            textDecoration: 'none', 
+            pointerEvents: !minifig ? 'none' : 'auto'
+          }}
+        >
+          <Button 
+            variant="contained" 
+            size="large" 
+            disabled={!minifig} 
+          >
+            PROCEED TO SHIPMENT
+          </Button>
+        </Link>
     </Container>
   )
 }

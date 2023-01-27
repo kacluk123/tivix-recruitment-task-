@@ -1,7 +1,7 @@
 import { TextField, Typography } from '@mui/material'
 import styled from 'styled-components'
 import { FieldErrorsImpl, UseFormRegister } from 'react-hook-form';
-import { emailRegex, phoneNumberRegex } from '../../utils/validation-regex';
+import { emailRegex, MIN_DATE, phoneNumberRegex, isDateValid } from '../../utils/validation';
 import { MinifigUIFormData } from '../../services/checkout';
 
 const Container = styled.div`
@@ -10,6 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 50px;
+  height: 100%;
   width: 100%;
 `
 
@@ -30,20 +31,25 @@ const Input = styled(TextField)`
   & label.Mui-focused {
     color: white;
   }
-
-  & .MuiInputBase-root {
+  & .MuiInputBase-root.MuiOutlinedInput-root {
     color: white;
+  }
+  & .MuiInputBase-root.MuiOutlinedInput-root:not(.Mui-error):hover {
+    fieldset {
+      border-color: var(--main-selection-color);
+    }
   }
   & .MuiInput-underline:after {
     border-bottom-color: white;
   }
-
   & .MuiFormLabel-root {
-    color: var(--main-selection-color);
+    color: var(--main-selection-color);  
   }
+  
   & .MuiOutlinedInput-notchedOutline {
     border: 1px solid var(--main-selection-color-light);
-  }
+  } 
+  
 `
 const labelProps = { shrink: true}
 
@@ -52,8 +58,18 @@ type MinifigShippingFormProps = {
   errors: Partial<FieldErrorsImpl<MinifigUIFormData>>
 }
 
+const validationCommonProps = {
+  minLength: {
+    value: 2,
+    message: 'Too short'
+  },
+  required: {
+    value: true,
+    message: 'Field is required'
+  }
+}
+
 export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormProps) => {
-  console.log(errors)
   return (
     <Container>
       <Typography 
@@ -71,11 +87,10 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
             label='Name' 
             variant='outlined' 
             error={Boolean(errors?.name)}
-            helperText={errors.name?.type}
+            helperText={errors.name?.message}
             id="outlined-error-helper-text"
             {...register("name", { 
-              minLength: 2,
-              required: true,
+              ...validationCommonProps,
             })} 
           />
           <Input 
@@ -83,9 +98,11 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
             label='Surname' 
             variant='outlined' 
             error={Boolean(errors?.surname)}
-            helperText={errors.surname?.type}
+            helperText={errors.surname?.message}
             id="outlined-error-helper-text"
-            {...register("surname", { required: true })} 
+            {...register("surname", { 
+              ...validationCommonProps,
+            })} 
           />
         </InputGroup>
         <Input 
@@ -93,23 +110,28 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
           label='Phone Number' 
           variant='outlined'
           error={Boolean(errors?.phoneNumber)}
-          helperText={errors.phoneNumber?.message || errors.phoneNumber?.type}
+          helperText={errors.phoneNumber?.message}
           id="outlined-error-helper-text"
-          {...register("phoneNumber", { required: true, pattern: {
-            value: phoneNumberRegex,
-            message: 'Phone number not valid'
-          } })} 
+          {...register("phoneNumber", { 
+            ...validationCommonProps,
+            pattern: {
+              value: phoneNumberRegex,
+              message: 'Phone number not valid'
+            } 
+          })} 
         />
         <Input 
           InputLabelProps={labelProps} 
           label='Email' 
           variant='outlined'
           error={Boolean(errors?.email)}
-          helperText={errors.email?.message || errors.email?.type}
+          helperText={errors.email?.message}
           id="outlined-error-helper-text"
-          {...register("email", { required: true, pattern: {
-            value: emailRegex,
-            message: 'Email not valid'
+          {...register("email", { 
+            ...validationCommonProps,
+            pattern: {
+              value: emailRegex,
+              message: 'Email not valid'
           }})} 
         />
         <Input 
@@ -118,27 +140,35 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
           variant='outlined' 
           type='date' 
           error={Boolean(errors?.dateOfBirth)}
-          helperText={errors.dateOfBirth?.type}
+          helperText={errors.dateOfBirth?.message}
           id="outlined-error-helper-text"
-          {...register("dateOfBirth", { required: true })} 
+          InputProps={{inputProps: { min: MIN_DATE, max: new Date().toISOString().substring(0,10)} }}
+          {...register("dateOfBirth", { 
+            ...validationCommonProps,
+            validate: (value: string) => isDateValid(value) || 'Date not valid'
+          })} 
         />
         <Input 
           InputLabelProps={labelProps} 
           label='Adress' 
           variant='outlined'
           error={Boolean(errors?.adress)}
-          helperText={errors.adress?.type}
+          helperText={errors.adress?.message}
           id="outlined-error-helper-text"
-          {...register("adress", { required: true })} 
+          {...register("adress", { 
+            ...validationCommonProps
+          })} 
         />
         <Input 
           InputLabelProps={labelProps} 
           label='City' 
           variant='outlined'
           error={Boolean(errors?.city)}
-          helperText={errors.city?.type}
+          helperText={errors.city?.message}
           id="outlined-error-helper-text"
-          {...register("city", { required: true })} 
+          {...register("city", { 
+            ...validationCommonProps
+          })} 
         />
         <InputGroup>
           <Input 
@@ -146,18 +176,22 @@ export const MinifigShippingForm = ({ register, errors }: MinifigShippingFormPro
             label='State' 
             variant='outlined' 
             error={Boolean(errors?.state)}
-            helperText={errors.state?.type}
+            helperText={errors.state?.message}
             id="outlined-error-helper-text"
-            {...register("state", { required: true })} 
+            {...register("state", { 
+              ...validationCommonProps
+            })} 
           />
           <Input 
             InputLabelProps={labelProps} 
             label='Zip Code' 
             variant='outlined' 
             error={Boolean(errors?.zipCode)}
-            helperText={errors.zipCode?.type}
+            helperText={errors.zipCode?.message}
             id="outlined-error-helper-text"
-            {...register("zipCode", { required: true })} 
+            {...register("zipCode", { 
+              ...validationCommonProps
+            })} 
           />
         </InputGroup>
       </InputsContainer>

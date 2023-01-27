@@ -27,12 +27,12 @@ class MinifigsService {
     return minifigsDto(data)
   }
 
-  async getRandomMinifigs(): Promise<UIResponseMinifigs> {
+  async getRandomMinifigs(howMany: number): Promise<UIResponseMinifigs> {
     const data = await this.getMinifigs({ 
       inThemeId: HARRY_POTTER_THEME_ID 
     })
     return {
-      results: getRandomArray<UIResponseSingleMinifig>(data.results, 3)
+      results: getRandomArray<UIResponseSingleMinifig>(data.results, howMany)
     }
   }
 

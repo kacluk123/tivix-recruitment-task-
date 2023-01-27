@@ -17,20 +17,30 @@ const SummaryCardContent = styled(CardContent)`
 `
 
 const MinifigsImage = styled.img`
-  width: 250px;
-  height: 250px;
+  width: 175px;
+  height: 175px;
   align-self: center;
   margin-top: 50px;
 `
 
 const MinifigsPartsList = styled.ul`
-  listy-style: none;
   padding: 0;
-  margin-top: 40px;
   display: flex;
+  padding: 0;
   flex-grow: 1;
+  list-style-type: none;
   flex-direction: column;
   gap: 25px;
+`
+
+const MinifigName = styled.p`
+  text-align: center;
+  font-weight: 600;
+`
+
+const MinifigParts = styled.p`
+  font-weight: 600;
+  margin-top: 25px;
 `
 
 type MinifigSummaryProps = {
@@ -48,15 +58,17 @@ export const MinifigSummary = ({ minifig, parts, isFormValid, onSubmit }: Minifi
           SUMMARY
         </Typography>
         <MinifigsImage src={minifig.setImgUrl} alt={minifig.name}/>
-        <Typography variant="h6" component="h6" textAlign='center'>
+        <MinifigName>
           {minifig.name}
-        </Typography>
-        <Typography variant="h6">
+        </MinifigName>
+        <MinifigParts>
           There are {parts.results.length} parts in this minifig:
-        </Typography>
+        </MinifigParts>
         <MinifigsPartsList>
           {parts.results.map(part => (
-            <MinifigPart part={part} />
+            <li key={part.partNum}>
+              <MinifigPart part={part} />
+            </li>
           ))}
         </MinifigsPartsList>
         <Button 

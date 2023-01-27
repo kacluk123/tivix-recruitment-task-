@@ -15,9 +15,14 @@ const Container = styled.div`
   justify-content: center;
   padding: 30px;
   grid-column-gap: 60px;
+  grid-row-gap: 30px;
+  min-height: inherit;
   align-items: center;
-  grid-template-columns: 60% 1fr;
   color: #FFFFFF;
+
+  @media (min-width: 980px) {
+    grid-template-columns: 60% 1fr;
+  }
 `
 
 export const MinifigCheckout = () => {
@@ -28,7 +33,7 @@ export const MinifigCheckout = () => {
   const { minifigId } = useParams()
   const navigate = useNavigate()
   const { register, handleSubmit, formState: { errors, isValid, isSubmitted } } = 
-    useForm<MinifigUIFormData>({ mode: 'onSubmit'});
+    useForm<MinifigUIFormData>({ mode: 'onChange'});
   
   const onSubmit: SubmitHandler<MinifigUIFormData> = async data => {
     try {

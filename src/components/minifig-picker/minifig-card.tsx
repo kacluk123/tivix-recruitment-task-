@@ -1,6 +1,6 @@
 import { UIResponseSingleMinifig } from "../../services/minifigs"
 import styled, { css } from 'styled-components'
-import { Card, CardContent, Typography, Link } from "@mui/material"
+import { Card, CardContent, Link } from "@mui/material"
 
 
 const MinifigsImage = styled.img`
@@ -25,10 +25,14 @@ const MinifigCardContainer = styled(Card)`
   cursor: pointer;
   border-radius: 50px;
   &.MuiPaper-root {
-    ${((props: { isSelected: boolean }) => props.isSelected && css`
+    ${((props: { $isSelected: boolean }) => props.$isSelected && css`
     box-shadow: 1px 0px 8px 10px var(--main-selection-color);
   `)}
   }
+`
+
+const MinifigName = styled.span`
+  font-weight: 800;
 `
 
 const DetailsLink = styled(Link)`
@@ -55,13 +59,13 @@ export const MinifigCard = ({ minifig, handlePick, isSelected }: MinifigCardProp
   }
 
   return (
-    <MinifigCardContainer onClick={handleClick} isSelected={isSelected}>
+    <MinifigCardContainer onClick={handleClick} $isSelected={isSelected}>
       <MinifigCardContent>
         <MinifigsImage src={minifig.setImgUrl} alt={minifig.name}/>
         <MinifigNameContent>
-          <Typography variant="h6" fontWeight="800">
+          <MinifigName>
             {minifig.name}
-          </Typography>
+          </MinifigName>
         </MinifigNameContent>
         <DetailsLink href={minifig.setUrl} target="_blank">Show details</DetailsLink>
       </MinifigCardContent>

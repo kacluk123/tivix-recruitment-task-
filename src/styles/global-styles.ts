@@ -8,7 +8,6 @@ export const GlobalStyle = createGlobalStyle`
   :root {
     font-size: 16px;
     line-height: 24px;
-    height: 100%;
     font-weight: 400;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -26,13 +25,13 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    height: 100vh;
-    background-color: #1F2137;
     margin: 0;
+    min-height: 100vh;
+    background-color: #1F2137;
     font-family: "Roboto","Helvetica","Arial",sans-serif;
   }
 
   #root {
-    height: 100%;
+    min-height: inherit;
   }
 `

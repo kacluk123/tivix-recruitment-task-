@@ -12,9 +12,7 @@ const MinifigsList = styled.ul`
   width: 100%;
 `
 
-const MinifigsListItem = styled.li`
- 
-`
+const MinifigsListItem = styled.li``
 
 type MinifigPickerProps = {
   minifigs: UIResponseSingleMinifig[]
